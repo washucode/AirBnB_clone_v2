@@ -119,37 +119,31 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         
-        args_l = args.split()
-        class_name = args_l[0]
-        if class_name not in HBNBCommand.classes:
+        try:
+            args = args.split(' ')[0]
+            class_name = eval(args)
+            for item in args[1:]:
+                try:
+                    key = item.split('=')[0]
+                    value = item.split('=')[1]
+                    if hasattr(class_name, key) is True:
+                        if type(value) is str:
+                            value = value.replace('_', ' ')
+                        if value[0] == '\"' and value[-1] == '\"':
+                            value = value[1:-1]
+                        if value.isdigit() is True:
+                            value = int(value)
+                        if '.' in value:
+                            value = float(value)
+                        setattr(class_name, key, value)
+                except:
+                    pass
+            new_instance = class_name()
+            new_instance.save()
+            print(new_instance.id)        
+        except:
             print("** class doesn't exist **")
             return
-        # remove class name from args
-        args_l = args_l[1:]
-        # create dictionary of kwargs
-        kwargs = {}
-        for arg in args_l:
-            if '=' in arg:
-                key, val = arg.split('=', 1)
-                if val.startswith('"') and val.endswith('"'):
-                    val = val[1:-1].replace('_', ' ').replace('"', '\\"')
-                elif '.' in val:
-                    try:
-                        val = float(val)
-                    except ValueError:
-                        pass
-                else:
-                    try:
-                        val = int(val)
-                    except ValueError:
-                        pass
-                kwargs[key] = val
-
-
-        new_instance = HBNBCommand.classes[class_name](**kwargs)
-        new_instance.save()
-        print(new_instance.id)
-        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
