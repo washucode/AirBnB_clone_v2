@@ -14,8 +14,14 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 
-classes = {"Amenity": Amenity, "City": City, "Place": Place,
-              "Review": Review, "State": State, "User": User}
+classes = {
+    "Amenity": Amenity,
+    "City": City,
+    "Place": Place,
+    "Review": Review,
+    "State": State,
+    "User": User
+    }
 
 
 class DBStorage:
@@ -42,8 +48,9 @@ class DBStorage:
                 objs += self.__session.query(clss).all()
         else:
             objs = self.__session.query(cls).all()
-        return {"{}.{}".format(type(obj).__name__, obj.id): obj for obj in objs}
-    
+        return {"{}.{}".format(type(obj).__name__, obj.id):
+                obj for obj in objs}
+
     def new(self, obj):
         """ adds a new object """
         self.__session.add(obj)
@@ -56,7 +63,7 @@ class DBStorage:
         """ deletes an object """
         if obj is not None:
             self.__session.delete(obj)
-    
+
     def reload(self):
         """ reloads data """
         Base.metadata.create_all(self.__engine)
@@ -68,7 +75,7 @@ class DBStorage:
     def classes(self):
         """ returns a dictionary of classes """
         return classes
-    
+
     def close(self):
         """ closes the session """
         self.__session.close()

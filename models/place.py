@@ -6,18 +6,22 @@ from sqlalchemy.orm import relationship
 from os import getenv
 
 
-
-class Place(BaseModel, Base if getenv('HBNB_TYPE_STORAGE') == 'db' else object):
+class Place(BaseModel, Base if getenv
+            ('HBNB_TYPE_STORAGE') == 'db' else object):
     """ A place to stay """
     if getenv("HBNB_TYPE_STORAGE") == "db":
         __tablename__ = "places"
         place_amenity = Table("place_amenity", Base.metadata,
-                                Column("place_id", String(60),
-                                         ForeignKey("places.id"),
-                                         primary_key=True, nullable=False),
-                                Column("amenity_id", String(60),
-                                         ForeignKey("amenities.id"),
-                                         primary_key=True, nullable=False))
+                              Column("place_id",
+                                     String(60),
+                                     ForeignKey("places.id"),
+                                     primary_key=True,
+                                     nullable=False),
+                              Column("amenity_id",
+                                     String(60),
+                                     ForeignKey("amenities.id"),
+                                     primary_key=True,
+                                     nullable=False))
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
         name = Column(String(128), nullable=False)
@@ -31,8 +35,9 @@ class Place(BaseModel, Base if getenv('HBNB_TYPE_STORAGE') == 'db' else object):
         reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
         amenities = relationship("Amenity", secondary="place_amenity",
-                                 viewonly=False, back_populates="place_amenities")
-       
+                                 viewonly=False,
+                                 back_populates="place_amenities")
+
     else:
         city_id = ""
         user_id = ""
