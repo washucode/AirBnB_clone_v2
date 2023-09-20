@@ -4,8 +4,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
-from models import storage
-from models.city import City
 
 
 class State(BaseModel, Base if getenv
@@ -21,6 +19,9 @@ class State(BaseModel, Base if getenv
     @property
     def cities(self):
         """ getter for cities """
+        from models import storage
+        from models.city import City
+
         cities = []
         for city in storage.all(City).values():
             if city.state_id == self.id:
