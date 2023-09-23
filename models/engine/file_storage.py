@@ -22,42 +22,48 @@ classes = {
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
-    file_path = 'file.json'
 
-    def __init__(self):
-        """Instantiation of FileStorage class"""
-        self.objects = {}
+    # path to json file
+    __file_path = 'file.json'
+
+    # dictionary of objects
+    __objects = {}
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls is None:
-            return self.objects
-        return {key: obj for key, obj in self.objects.items() if
-                isinstance(obj, cls)}
+            return self.__objects
+        
+        if isinstance(cls, str):
+            cls = eval(cls)
+
+        cls_dict = {key: obj for key, obj in self.__objects.items()
+                    if isinstance(obj, cls)}
+        return cls_dict
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
         if obj is not None:
             key = f"{obj.__class__.__name__}.{obj.id}"
-            self.objects[key] = obj
+            self.__objects[key] = obj
 
     def save(self):
         """Saves storage dictionary to file"""
         json_objects = {key: obj.to_dict() for key, obj
-                        in self.objects.items()}
-        with open(self.file_path, 'w') as f:
+                        in self.__objects.items()}
+        with open(self.__file_path, 'w') as f:
             json.dump(json_objects, f)
 
     def reload(self):
         """Loads storage dictionary from file"""
         try:
-            with open(self.file_path, 'r') as f:
+            with open(self.__file_path, 'r') as f:
                 json_objects = json.load(f)
             for key, val in json_objects.items():
                 class_name = val['__class__']
                 if class_name in classes:
                     objects = classes[class_name](**val)
-                    self.objects[key] = objects
+                    self.__objects[key] = objects
         except FileNotFoundError:
             pass
 
@@ -65,7 +71,7 @@ class FileStorage:
         """Deletes an object from __object if it exists"""
         if obj is not None:
             key = f"{obj.__class__.__name__}.{obj.id}"
-            self.objects.pop(key, None)
+            self.__objects.pop(key, None)
 
     def close(self):
         """Calls reload method to deserialize JSON file to objects"""
