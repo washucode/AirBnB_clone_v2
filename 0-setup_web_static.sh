@@ -14,20 +14,27 @@ sudo mkdir -p /data/web_static/releases/test/ /data/web_static/shared/
 sudo chown -R ubuntu:ubuntu /data/
 
 # Define the test index.html content
-index_content="This a test page for html file."
+index_content="<html>
+    <head>
+    </head>
+    <body>
+    Holberton School
+    </body>
+</html>"
+
 
 # Create or update the index.html page
 echo "$index_content" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 # create symbolic link
-rm -rf /data/web_static/current
+sudo rm -rf /data/web_static/current
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# configure nginx
-printf %s "server {
+# Configure Nginx
+nginx_config="server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    add_header X-Served-By $HOSTNAME;
+    add_header X-Served-By \$HOSTNAME;
     root   /var/www/html;
     index  index.html index.htm;
 
@@ -45,7 +52,10 @@ printf %s "server {
         root /var/www/html;
         internal;
     }
-}" > /etc/nginx/sites-available/default
+}"
+
+# Update the Nginx configuration using the provided block
+echo "$nginx_config" | sudo tee /etc/nginx/sites-available/default > /dev/null
 
 # Test Nginx configuration for syntax errors
 sudo nginx -t
