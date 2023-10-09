@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env bash
 # Script sets up your web servers for the deployment of web_static
 
@@ -84,5 +83,4 @@ sudo chown -R ubuntu:ubuntu /data/
 sudo sed -i '42i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
 
 # Restart nginx
->>>>>>> d96a6a9 (task 0)
 sudo service nginx restart
