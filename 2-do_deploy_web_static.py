@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" 
+"""
     Fabric script that distributes an archive to your web servers
 """
 
@@ -30,5 +30,5 @@ def do_deploy(archive_path):
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
             .format(folder_name))
         return True
-    except:
+    except Exception:
         return False

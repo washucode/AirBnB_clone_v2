@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" 
+"""
     Fabric script that distributes an archive to your web servers
 """
 
@@ -8,6 +8,7 @@ from os.path import exists, isdir
 from datetime import datetime
 
 env.hosts = ['52.87.153.255', '54.85.142.216']
+
 
 def do_pack():
     """Function to compress files"""
@@ -18,7 +19,7 @@ def do_pack():
     try:
         local("tar -cvzf {} web_static".format(file))
         return file
-    except:
+    except Exception:
         return None
 
 
@@ -44,7 +45,7 @@ def do_deploy(archive_path):
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
             .format(folder_name))
         return True
-    except:
+    except Exception:
         return False
 
 
