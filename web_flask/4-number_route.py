@@ -25,7 +25,7 @@ def c_route(text):
 @app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def p_route(text='is cool'):
-    """ Method that returns Python followed by the value of the text variable """
+    """ Method that returns Python followed by the value """
     return 'Python {}'.format(text.replace('_', ' '))
 
 
@@ -33,6 +33,7 @@ def p_route(text='is cool'):
 def n_route(n):
     """ Method that returns n is a number only if n is an integer """
     return '{:d} is a number'.format(n)
+
 
 if __name__ == '__main__':
     """Main function"""
