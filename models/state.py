@@ -20,16 +20,15 @@ class State(BaseModel, Base if getenv
         """initializes State"""
         super().__init__(*args, **kwargs)
 
-    @property
-    def cities(self):
-        """ getter for cities """
-        from models import storage
-        from models.city import City
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
+        @property
+        def cities(self):
+            """ getter for cities """
+            from models import storage
+            from models.city import City
 
-        cities = []
-        for city in storage.all(City).values():
-            if city.state_id == self.id:
-                cities.append(city)
-        return cities
-    
-
+            cities = []
+            for city in storage.all(City).values():
+                if city.state_id == self.id:
+                    cities.append(city)
+            return cities
