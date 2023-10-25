@@ -16,6 +16,10 @@ class State(BaseModel, Base if getenv
     else:
         name = ""
 
+    def __init__(self, *args, **kwargs):
+        """initializes State"""
+        super().__init__(*args, **kwargs)
+
     @property
     def cities(self):
         """ getter for cities """
@@ -27,3 +31,5 @@ class State(BaseModel, Base if getenv
             if city.state_id == self.id:
                 cities.append(city)
         return cities
+    
+
